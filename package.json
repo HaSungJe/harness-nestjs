@@ -1,10 +1,10 @@
 {
-  "name": "harness-nestjs",
+  "name": "nestjs-harness-plugin",
   "version": "0.1.0",
   "type": "module",
   "description": "Drop-in harness for NestJS — structures AI-assisted feature development via request/work specs",
   "bin": {
-    "harness-nestjs": "./bin/cli.js"
+    "nestjs-harness-plugin": "./bin/cli.js"
   },
   "files": [
     "bin",
@@ -28,12 +28,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/HaSungJe/harness-nestjs.git"
+    "url": "git+https://github.com/HaSungJe/nestjs-harness-plugin.git"
   },
   "bugs": {
-    "url": "https://github.com/HaSungJe/harness-nestjs/issues"
+    "url": "https://github.com/HaSungJe/nestjs-harness-plugin/issues"
   },
-  "homepage": "https://github.com/HaSungJe/harness-nestjs#readme",
+  "homepage": "https://github.com/HaSungJe/nestjs-harness-plugin#readme",
   "engines": {
     "node": ">=18"
   },

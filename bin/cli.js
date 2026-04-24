@@ -8,7 +8,7 @@ import { execa } from 'execa';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const SKELETON_DIR = path.resolve(__dirname, '..', 'skeleton');
-const PKG_NAME = 'harness-nestjs';
+const PKG_NAME = 'nestjs-harness-plugin';
 const HARNESS_BLOCK_START = '# === harness-block-start ===';
 const HARNESS_BLOCK_END = '# === harness-block-end ===';
 
@@ -22,7 +22,7 @@ const c = {
 };
 
 const log = {
-    info: (m) => console.log(c.cyan('[harness-nestjs]'), m),
+    info: (m) => console.log(c.cyan('[nestjs-harness-plugin]'), m),
     ok: (m) => console.log(c.green('  ✓'), m),
     skip: (m) => console.log(c.gray('  -'), c.gray(`${m} (exists, skipped)`)),
     warn: (m) => console.log(c.yellow('  !'), m),
@@ -81,7 +81,7 @@ async function runInit(opts) {
 
     // 6. Install self as devDependency
     if (!dryRun && !skipInstall) {
-        log.info('\n[5/5] Installing harness-nestjs as devDependency...');
+        log.info('\n[5/5] Installing nestjs-harness-plugin as devDependency...');
         try {
             await execa('npm', ['install', '-D', PKG_NAME], {cwd, stdio: 'inherit'});
             log.ok(`${PKG_NAME} added to devDependencies`);
@@ -297,7 +297,7 @@ async function appendGitignore(cwd, {dryRun, stats}) {
     }
 
     const appended = (destContent.trimEnd() ? destContent.trimEnd() + '\n\n' : '') +
-        '# harness-nestjs\n' + toAppend.join('\n') + '\n';
+        '# nestjs-harness-plugin\n' + toAppend.join('\n') + '\n';
 
     if (!dryRun) {
         await fs.writeFile(destPath, appended);

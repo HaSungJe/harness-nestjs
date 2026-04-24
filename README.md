@@ -1,4 +1,4 @@
-# harness-nestjs
+# nestjs-harness-plugin
 
 > NestJS 프로젝트에서 **AI 에게 "이런 기능 만들어줘" 한 줄만 던져도** 스펙 작성 → 구현 → 테스트 → 회귀 검사까지 일관된 절차로 흘러가게 잡아주는 하네스.
 
@@ -22,7 +22,7 @@
 ## 설치
 
 ```bash
-npx github:HaSungJe/harness-nestjs init
+npx github:HaSungJe/nestjs-harness-plugin init
 ```
 
 끝. 별도의 `npm install` 단계 불필요 — init 이 자기 자신을 devDependency 로 추가 후 필요한 파일들을 프로젝트에 배치합니다.
@@ -47,9 +47,9 @@ npx github:HaSungJe/harness-nestjs init
 ## 옵션
 
 ```bash
-npx github:HaSungJe/harness-nestjs init             # 기본 동작
-npx github:HaSungJe/harness-nestjs init --dry-run   # 실제 변경 없이 예정 작업만 출력
-npx github:HaSungJe/harness-nestjs init --force     # 기존 파일 덮어쓰기 (주의)
+npx github:HaSungJe/nestjs-harness-plugin init             # 기본 동작
+npx github:HaSungJe/nestjs-harness-plugin init --dry-run   # 실제 변경 없이 예정 작업만 출력
+npx github:HaSungJe/nestjs-harness-plugin init --force     # 기존 파일 덮어쓰기 (주의)
 ```
 
 ## 더 자세한 워크플로
