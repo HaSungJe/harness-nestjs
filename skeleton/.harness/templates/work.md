@@ -9,14 +9,20 @@
 
 ## 파일 목록
 
+<!--
+  경로·파일 구조는 프로젝트 CLAUDE.md "Architecture" 섹션 및 그에 링크된
+  `docs/architecture.md` 의 "New Domain Minimum File Structure" 규약을 따른다.
+  아래 행은 예시 — 실제 프로젝트 규약에 맞춰 작성.
+-->
+
 | 파일 | 작업 |
 |------|------|
-| `src/api/v1/{domain}/dto/{file}.dto.ts` | 신규 생성 |
-| `src/api/v1/{domain}/interfaces/{domain}.repository.interface.ts` | 메서드 추가 |
-| `src/api/v1/{domain}/repositories/{domain}.repository.ts` | 메서드 추가 |
-| `src/api/v1/{domain}/{domain}.service.ts` | 메서드 추가 |
-| `src/api/v1/{domain}/{domain}.controller.ts` | 엔드포인트 추가 |
-| `src/api/v1/{domain}/test/{featureName}.spec.ts` | 신규 생성 |
+| `<domain>/dto/<file>.dto.ts` | 신규 생성 |
+| `<domain>/interfaces/<domain>.repository.interface.ts` | 메서드 추가 |
+| `<domain>/repositories/<domain>.repository.ts` | 메서드 추가 |
+| `<domain>/<domain>.service.ts` | 메서드 추가 |
+| `<domain>/<domain>.controller.ts` | 엔드포인트 추가 |
+| `<domain>/test/<featureName>.spec.ts` | 신규 생성 |
 
 <!-- 변경 없는 파일도 명시: `xxx.module.ts` — 변경 없음 -->
 
@@ -24,13 +30,17 @@
 
 ## 1. DTO
 
+> 네이밍·파일 구성 규칙은 CLAUDE.md "Naming Conventions" 및 "DTO" 관련 섹션 참고.
+
 ```typescript
-// 필요한 DTO 클래스 작성 (QueryDto / ParamDto / ItemDto / ResultDto)
+// 필요한 DTO 클래스 작성 (QueryDto / ParamDto / ItemDto / ResultDto 등 프로젝트 규약대로)
 ```
 
 ---
 
 ## 2. Repository Interface
+
+> 시그니처·파라미터 타입 규칙은 CLAUDE.md "Repository" 섹션 참고.
 
 ```typescript
 // 추가할 메서드 시그니처
@@ -40,23 +50,28 @@
 
 ## 3. Repository 구현
 
+> try/catch · 에러 처리 · 관계 로딩 규칙은 CLAUDE.md "Repository" / "Error Handling" 섹션 참고.
+
 ```typescript
-// 구현 코드 (try/catch 포함)
+// 구현 코드
 ```
 
 ---
 
 ## 4. Service
 
-> **큐 적용 여부**: request.md의 `queue_required` 값에 따라 결정. 기본값 `Y` — INSERT/UPDATE/DELETE 메서드에는 반드시 `@UseQueue('<domain>-consumer', '<domain>-service-<action>')` 를 `@Transactional()` 위에 명시. `N`인 경우 그 사유를 한 줄로 인용.
+> 트랜잭션·큐·권한 등 데코레이터 적용은 CLAUDE.md 해당 섹션 규칙대로.
+> 결정이 필요한 항목(Y/N, 적용 범위)은 request.md "확정 설계 결정사항" 에서 확정한 값을 반영.
 
 ```typescript
-// 구현 코드 (@UseQueue → @Transactional 순서)
+// 구현 코드
 ```
 
 ---
 
 ## 5. Controller
+
+> Swagger 데코레이터 순서·JSDoc·Guard 규칙은 CLAUDE.md "Swagger" / "Auth" 섹션 참고.
 
 ```typescript
 // 엔드포인트 + Swagger 데코레이터
@@ -66,9 +81,11 @@
 
 ## 6. 테스트 케이스
 
+> 테스트 방식·강도·케이스 구성은 `.harness/docs/feature-implement/test-file.md` 참고.
+
 ```
 [SUCCESS]           정상 흐름
-[FAIL:validation]   필수 필드 전체 누락
+[FAIL:validation]   validation 분기 대표 샘플링
 [FAIL:duplicate]    {테이블명} — {컬럼} 중복   ← affected_tables 기반, 해당 없으면 생략
 [FAIL:service]      {service throw 분기마다}
 [FAIL:repository]   {repository catch 블록마다}

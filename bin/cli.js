@@ -101,8 +101,9 @@ async function runInit(opts) {
     console.log();
     log.info(c.bold('Next steps'));
     console.log('  1. Restart Claude Code to pick up .claude/settings.json hooks');
-    console.log('  2. Add the routing block to CLAUDE.md — see .harness/README.md §2');
-    console.log('  3. Try ' + c.cyan('"user 도메인 생성"') + ' in Claude Code');
+    console.log('  2. ' + c.cyan('Project conventions sample') + ' at ' + c.cyan('.harness/samples/CLAUDE.md') + ' + ' + c.cyan('.harness/samples/docs/') + ' — copy to project root and customize');
+    console.log('  3. Add the routing block to CLAUDE.md — see .harness/README.md §2 (already included in the sample)');
+    console.log('  4. Try ' + c.cyan('"user 도메인 생성"') + ' in Claude Code');
 }
 
 // ─── Step 2: Copy .harness/ ─────────────────────────────────────────────────

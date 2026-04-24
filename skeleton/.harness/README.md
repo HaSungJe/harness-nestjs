@@ -31,9 +31,11 @@
 ├── hooks/                  # Claude Code hook 스크립트
 │   ├── on-request-written.sh
 │   ├── on-work-written.sh
-│   ├── on-work-approved.sh
 │   └── run-tests.sh
-├── samples/                # 참고용 워크플로 샘플(request/work/report + 스크린샷)
+├── samples/                # 참고용 샘플
+│   ├── workflow-*.md        #   워크플로 샘플 (request/work/report) + 스크린샷
+│   ├── CLAUDE.md            #   프로젝트 규칙 샘플 (루트에 복사해 커스터마이즈)
+│   └── docs/                #   CLAUDE.md 가 링크하는 상세 문서 샘플
 ├── skeleton/               # 타 프로젝트로 "설치" 될 때 복사·merge 될 원본 파일
 │   ├── claude-settings.partial.json  # .claude/settings.json 에 merge 할 하네스 항목
 │   ├── husky-pre-commit.sh           # .husky/pre-commit 에 append 할 하네스 블록

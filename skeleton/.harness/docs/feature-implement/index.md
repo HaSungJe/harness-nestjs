@@ -9,7 +9,7 @@
 
 ```
 ⑤ 사람 → work 파일 검토 후 Claude에게 직접 구현 지시 ("xxx 작업 시작")
-⑥ Claude → 구현 코드 + src/api/v1/<domain>/test/<feature>.spec.ts 동시 생성
+⑥ Claude → 구현 코드 + spec 파일 동시 생성 (spec 경로: `harness-config.json` 의 `test_spec_path` 설정값을 따름)
 ⑦ Claude → Bash로 해당 기능 spec만 실행 (`npm test -- --testPathPatterns=<featureName>`)
            → 실패 시 에러 분석 후 수정 (최대 10회)
 ⑧ Claude → 리포트 생성: `.harness/output/report/<domain>/<featureName>-report.md`

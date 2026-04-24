@@ -38,6 +38,7 @@ npx github:HaSungJe/nestjs-harness-plugin init
 | 항목 | 경로 | 역할 |
 |---|---|---|
 | 하네스 워크플로 | `.harness/` | request/work 스펙 · validator · hook 스크립트 · 템플릿 |
+| 프로젝트 규칙 샘플 | `.harness/samples/CLAUDE.md`, `.harness/samples/docs/` | NestJS 11 + TypeORM + BullMQ 기준 코드 컨벤션 예시 (루트 `CLAUDE.md` / `docs/` 에 복사해 커스터마이즈) |
 | Claude Code 훅 | `.claude/settings.json` | work/request 파일 저장 시 validator 자동 실행 |
 | Husky pre-commit | `.husky/pre-commit` | `src/` 또는 `*.spec.ts` 변경 시 `npm test` (회귀 보장) |
 | .gitignore | `.gitignore` | 하네스 세션 로컬 상태 파일 (`.retry-count` 등) 제외 |
