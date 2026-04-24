@@ -1,4 +1,4 @@
-<!-- 실제 작성 예시: .harness/samples/workflow/work.md -->
+<!-- 실제 작성 예시: .harness/samples/workflow/workflow-work.md -->
 # Work Plan — {featureName}
 
 ## 기능 요약
