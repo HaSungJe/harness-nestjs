@@ -38,12 +38,18 @@ HTTP 상태코드만 확인하는 "값 만들어서 반환 확인" 수준의 테
 - 이유: 단순 상태코드만 보면 "다른 사용자 레코드 업데이트" "평문 저장" "wrong argument order" 같은 치명적 버그가 통과
 
 ### [FAIL:validation] / [FAIL:service] short-circuit 검증
-- 에러 분기 발생 시 **그 이후 단계의 repository/util mock 은 호출되지 않았음**을 `.not.toHaveBeenCalled()` 로 확인
-- 응답 본문의 validation 에러 구조(필드명·키 이름 등)가 프로젝트 CLAUDE.md 규칙과 일치하는지 확인
+- **실패 지점까지** 호출된 mock 의 **호출 횟수**(`toHaveBeenCalledTimes`) + **호출 인자**(`toHaveBeenCalledWith`) 확인
+- 실패 분기 이후 단계의 mock 은 **`.not.toHaveBeenCalled()`** 로 호출되지 않았음을 모두 확인
+- 응답 본문의 `message` 가 service 에서 던진 메시지와 정확히 일치하는지 확인
+- validation 에러의 경우 에러 구조(필드명·키 이름 등)가 프로젝트 CLAUDE.md 규칙과 일치하는지 확인
+- 목표: 테스트만 봐도 "어느 단계까지 실행되다 왜 멈췄는지" 추적 가능해야 함
 
 ### [FAIL:repository] 격리 검증
-- 실패 지점 이후의 mock 이 호출되지 않았음을 확인
-- 응답 `message` 가 repository 에서 던진 메시지와 일치하는지 확인
+- **실패 지점까지** 호출된 mock 의 **호출 횟수**(`toHaveBeenCalledTimes`) + **호출 인자**(`toHaveBeenCalledWith`) 확인
+  - write 메서드는 [SUCCESS] 와 동일하게 인자로 전달된 entity 의 컬럼 값까지 검증
+- 실패 지점 **이후** 단계의 mock 은 **`.not.toHaveBeenCalled()`** 로 호출되지 않았음을 모두 확인
+- 응답 `message` 가 repository 에서 던진 메시지와 정확히 일치하는지 확인
+- 목표: 테스트만 봐도 "어느 repository 호출에서 실패했고, 그 전까지 어떤 데이터가 흘렀는지" 추적 가능해야 함
 
 ### 금지 사항
 - repository/util mock 에 아무 assertion 없이 상태코드만 검사하는 케이스
