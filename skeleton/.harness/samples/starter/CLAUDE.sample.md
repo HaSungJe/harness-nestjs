@@ -158,6 +158,7 @@ src/
 - errno 1062 확인: `error.errno === 1062 && error.sqlMessage.indexOf('constraint명') !== -1`
 - 범용 `update` 메서드 사용 시 errno 1062는 service에서 catch하여 처리 (repository가 제약 식별 불가)
 - `createValidationError` — **service에서만** 사용. repository 금지
+- **`validationErrors` 사용 조건**: 사용자가 직접 입력한 필드(body/query/path param)가 잘못된 경우에만 포함. 비즈니스 규칙 위반·서버 내부 생성값(JWT user_id, dayjs 시각 등) 오류는 `{message}` 단독 throw
 - Service throw: `const message = '...'; throw new HttpException({message, validationErrors: createValidationError(...)}, ...)`
 
 → 상세: [docs/error-handling.md](docs/error-handling.md)
