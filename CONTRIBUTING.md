@@ -4,6 +4,10 @@
 
 ## 새 명령 추가
 
+각 명령은 **두 진입점** 을 가져야 한다 — 한국어 키워드 + 슬래시 커맨드. 둘은 동일한 `docs/<command>/index.md` 를 가리키므로 결과 동작은 같다. **5곳을 모두 갱신** 해야 사용자가 어느 경로로 들어와도 막히지 않는다.
+
+> **네이밍 규칙**: 슬래시 이름과 docs 폴더 이름을 **1:1 매칭** 시킨다. 예: `/feature-plan` ↔ `docs/feature-plan/`. 두 단계로 나뉘는 명령은 `-plan` / `-implement` 접미어로 분리 (`feature-modify-plan` / `feature-modify-implement`). git 관련은 `git-` 접두어 (`/git-commit`, `/git-push`).
+
 ### ① `skeleton/.harness/docs/<command>/index.md` 생성
 
 명령 1개당 **폴더 1개, index.md 1개**. 하위 규칙이 없는 명령도 동일 구조 유지 (일관성).
@@ -19,7 +23,7 @@ index.md 권장 섹션:
 ````markdown
 # <명령 이름> — 한 줄 설명
 
-"xxx <키워드>" 명령을 받으면 이 문서를 따른다.
+한국어 키워드 `xxx <키워드>` 또는 슬래시 `/<command>` 로 진입.
 
 ## 단계
 1. ...
@@ -32,27 +36,62 @@ index.md 권장 섹션:
 → [../<next-command>/index.md](../<next-command>/index.md)
 ````
 
-### ② `skeleton/.harness/docs/routing.md` 인덱스에 1행 추가
+### ② `skeleton/.claude/commands/<command>.md` 생성 (슬래시 진입점)
+
+폴더명과 동일한 파일명. 본문은 `docs/<command>/index.md` 로 위임하는 얇은 wrapper.
 
 ````markdown
-| 키워드N (예: `xxx 키워드N`) | [<commandN>/index.md](./<commandN>/index.md) |
+---
+description: <한 줄 설명 — Claude Code 슬래시 메뉴에 표시됨>
+argument-hint: <인자 형식 — 예: <featureName> 또는 (선택) ...>
+---
+
+`$ARGUMENTS` 를 <역할> 로 보고, `.harness/docs/<command>/index.md` 의 절차를 그대로 따른다.
+
+이 슬래시 커맨드는 한국어 키워드 `xxx <키워드>` 와 동등한 진입점이다.
+
+⚠️ <전제 조건이 있으면 한 줄 요약>
 ````
 
-적절 카테고리가 없으면 섹션 신설.
+### ③ `skeleton/.harness/docs/routing.md` 에 1행 추가
 
-### ③ `skeleton/.harness/samples/starter/CLAUDE.sample.md` 라우팅 블록에 키워드 1줄 추가
+현재 routing.md 는 4개 섹션으로 나뉨 — `## 도메인 생성` / `## 기능 생성` / `## 기능 수정` / `## 배포`. 적절한 섹션의 표에 한 행을 추가 (없으면 섹션 신설). **3컬럼 형식** 유지:
 
-"## 플러그인 설정 > 명령어 라우팅" 아래 bullet 에:
+````markdown
+| `<자연어 트리거>` | `/<slash> <args>` | [<command>/index.md](./<command>/index.md) |
+````
+
+### ④ `skeleton/.harness/samples/starter/CLAUDE.sample.md` 두 곳 갱신
+
+"## 플러그인 설정 > 명령어 라우팅" 블록 안에서:
+
+**(a) 한국어 키워드 bullet 리스트** (`**1) 한국어 키워드**` 아래) 에 1줄 추가:
 
 ````markdown
 - `키워드N` (예: `xxx 키워드N`) — 설명
 ````
 
-### ④ 검증 체크리스트
+**(b) 슬래시 bullet 리스트** (`**2) 슬래시 커맨드**` 아래) 에 1개 추가 — 같은 그룹의 다른 슬래시들과 함께 한 줄에:
 
-- [ ] 키워드가 기존 명령과 겹치지 않는가
-- [ ] 이전·이후 단계가 있는 명령이면 양방향 링크(`이후 단계` / `전제`) 걸었는가
-- [ ] `docs/routing.md` 트리거 문구가 `CLAUDE.sample.md` 키워드와 일치하는가 (Claude 가 찾을 수 있어야 함)
+````markdown
+- `/<slashN> <args>` · ...
+````
+
+### ⑤ `README.md` 워크플로 표 / 전제 조건 표에 새 행 추가
+
+새 명령이 워크플로 단계 중 어디에 들어가는지 사용자가 한눈에 보게:
+- "단계별 워크플로" 표의 "관련 명령" 컬럼에 한국어/슬래시 병기
+- "전제 조건" 표에 새 행 (전제가 있는 명령만)
+- "설치되는 것" 표의 "커스텀 슬래시 커맨드" 행에 새 슬래시 추가
+
+### ⑥ 검증 체크리스트
+
+- [ ] 키워드·슬래시 이름이 기존 명령과 겹치지 않는가
+- [ ] 슬래시 이름이 docs 폴더명과 1:1 매칭인가 (예: `/feature-plan` ↔ `docs/feature-plan/`)
+- [ ] 이전·이후 단계가 있는 명령이면 양방향 링크 걸었는가 (`이후 단계` / `전제`)
+- [ ] `docs/routing.md` 의 키워드·슬래시 표기가 `CLAUDE.sample.md` 와 일치하는가
+- [ ] `.claude/commands/<name>.md` frontmatter 의 `description` 이 routing.md 의 표 설명과 의미 일치하는가
+- [ ] 두 진입점 모두 실제 동작 테스트 — 한국어 키워드 입력 + `/<slash>` 입력 모두 같은 결과인지
 
 ### 키워드 작성 요령
 
@@ -64,10 +103,15 @@ index.md 권장 섹션:
 
 ## 명령 제거 / 이름 변경
 
+새 구조에서 명령 변경 시 **6곳을 모두** 갱신:
+
 - [ ] `skeleton/.harness/docs/<command>/` 폴더 삭제 또는 rename
-- [ ] `skeleton/.harness/docs/routing.md` 해당 행 삭제 / 수정
-- [ ] `skeleton/.harness/samples/starter/CLAUDE.sample.md` 해당 키워드 bullet 삭제 / 수정
-- [ ] 다른 `index.md` 에서 `../<old>/index.md` 링크 검색·갱신
+- [ ] `skeleton/.claude/commands/<command>.md` 슬래시 파일 삭제 또는 rename (폴더명과 매칭 유지)
+- [ ] `skeleton/.harness/docs/routing.md` 해당 행 삭제/수정 (3컬럼 모두)
+- [ ] `skeleton/.harness/samples/starter/CLAUDE.sample.md` 의 한국어 bullet + 슬래시 bullet **양쪽** 삭제/수정
+- [ ] 다른 `docs/<x>/index.md` 에서 `../<old>/index.md` 링크 검색·갱신
+- [ ] `README.md` 워크플로 표·전제 조건 표·설치 표의 해당 슬래시/키워드 갱신
+- [ ] `CHANGELOG.md` 에 변경 사유 + 마이그레이션 영향 기록
 
 ---
 
@@ -114,6 +158,8 @@ index.md 권장 섹션:
 - update: 플러그인 소유 커맨드만 wipe + 재복사 (사용자 추가 커맨드는 절대 안 건드림 — 파일명 매칭)
 - uninstall: 플러그인 소유 커맨드만 제거, 디렉터리 비면 폴더도 삭제
 
-새 슬래시 커맨드 추가 시:
-1. `skeleton/.claude/commands/<name>.md` 생성 (frontmatter `description` 필수)
-2. README.md 에 `/<name>` 사용법 1문단 추가
+CLI 는 `walk(skeleton/.claude/commands)` 로 모든 `.md` 파일을 자동 발견 — 매니페스트 따로 없음. 새 슬래시 추가/제거는 파일을 만들거나 지우면 자동 반영.
+
+> **워크플로 명령**(`/feature-plan` 등) 추가 시엔 위 "새 명령 추가" 섹션의 5단계 절차를 따른다 (슬래시 + 키워드 + routing.md + CLAUDE.sample.md + README 5곳 갱신).
+>
+> **워크플로 외 보조 슬래시**(예: `/harness-init`) 추가 시엔 슬래시 파일 + README 갱신만 하면 충분. routing.md / CLAUDE.sample.md 라우팅 블록은 워크플로 명령 전용.

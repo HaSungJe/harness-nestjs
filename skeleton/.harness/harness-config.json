@@ -2,7 +2,7 @@
   "project_name": "{{PROJECT_NAME}}",
   "harness_rules": {
     "step_0_required_fields": ["feature_goal", "domain", "api_method", "api_path", "affected_tables"],
-    "step_5_fail_retry_limit": 10,
+    "self_heal_retry_limit": 10,
     "enforced_docs": [
       "CLAUDE.md",
       "docs/architecture.md",

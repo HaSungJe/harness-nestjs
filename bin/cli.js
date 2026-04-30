@@ -8,7 +8,9 @@ import { execa } from 'execa';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const SKELETON_DIR = path.resolve(__dirname, '..', 'skeleton');
+const PLUGIN_PKG = await fs.readJson(path.resolve(__dirname, '..', 'package.json'));
 const PKG_NAME = 'nestjs-harness-plugin';
+const PKG_VERSION = PLUGIN_PKG.version;
 const PKG_INSTALL_SPEC = 'github:HaSungJe/nestjs-harness-plugin';
 const HARNESS_BLOCK_START = '# === harness-block-start ===';
 const HARNESS_BLOCK_END = '# === harness-block-end ===';
@@ -33,7 +35,7 @@ const log = {
 program
     .name(PKG_NAME)
     .description('Drop-in harness for NestJS — structures AI-assisted feature development')
-    .version('0.1.0');
+    .version(PKG_VERSION);
 
 program
     .command('init')
@@ -118,9 +120,9 @@ async function runInit(opts) {
     console.log();
     log.info(c.bold('Next steps'));
     console.log('  1. Restart Claude Code to pick up .claude/settings.json hooks');
-    console.log('  2. ' + c.cyan('Project conventions starter') + ' at ' + c.cyan('.harness/samples/starter/') + ' — strip `.sample.` and copy to project root if needed');
-    console.log('  3. Add the routing block to CLAUDE.md — the sample already includes it under "## 플러그인 설정"');
-    console.log('  4. Try ' + c.cyan('"user 도메인 생성"') + ' in Claude Code');
+    console.log('  2. Run ' + c.cyan('/harness-init') + ' in Claude Code — auto-generates root CLAUDE.md + docs/ from your stack');
+    console.log('     (or strip `.sample.` from ' + c.cyan('.harness/samples/starter/CLAUDE.sample.md') + ' and copy/customize manually)');
+    console.log('  3. Try ' + c.cyan('/feature-plan <featureName>') + ' or ' + c.cyan('"<featureName> 기능 생성"') + ' in Claude Code');
 }
 
 // ─── update command ─────────────────────────────────────────────────────────
