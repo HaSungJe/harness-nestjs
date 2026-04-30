@@ -139,17 +139,28 @@ src/
 - 복잡한 조인 · 집계 · 페이지네이션은 기능별 메서드 허용 (QueryBuilder 사용 시)
 - 모든 메서드 `try/catch` + `throw error` 필수
 - `findOne` / `find` 시 `loadRelationIds: true` 필수 (FK 컬럼 undefined 방지)
+- **Pagination 메서드는 단일 함수 패턴** — `total_count` / `count` / `pagination` / `list` 를 한 함수 내에서 같은 QueryBuilder 인스턴스를 단계적으로 재사용해 모두 처리. 별도 `getXxxCount` 메서드 만들지 않음 (아래 "Pagination" 섹션 참고)
 
 → 상세: [docs/repository.md](docs/repository.md)
 
 ## Pagination
 
 - Query 파라미터: 컨트롤러에서 `new XxxDto(query)` 생성 후 전달
-- 서비스 4단계: `total_count(null)` → `count(dto)` → `Pagination(count)` → list
+- **Repository 단일 메서드 패턴** — `getXxxList(dto)` 하나가 `{total_count, pagination, list}` 를 묶어 반환. QueryBuilder 1개를 단계적으로 재사용:
+  1. 기본 `join` + 기본 `where` (삭제 여부 등) → `const total_count = await builder.getCount()`
+  2. `dto` 기반 추가 검색 조건 (`andWhere`) → `const count = await builder.getCount()`
+  3. `Pagination` 생성 (`count` 기반)
+  4. `builder.select(...) / .orderBy(...) / .limit(pagination.limit) / .offset(pagination.offset)` 후 `await builder.getMany()`
+  5. `{ total_count, pagination, list }` 반환
 - Pagination 객체명은 항상 `pagination`
 - Pagination 생성 시 `all_search_yn` 반드시 포함:
   ```typescript
   const pagination = new Pagination({total_count: count, page: dto.page, size: dto.size, page_size: dto.page_size, all_search_yn: dto.all_search_yn});
+  ```
+- **Service 호출은 1줄** — repository 가 이미 묶어서 반환하므로 service 는 변환만:
+  ```typescript
+  const { total_count, pagination, list } = await this.repository.getXxxList(dto);
+  return { list, total_count, pagination: pagination.getPagination() };
   ```
 
 ## Query DTO 생성자 규칙
